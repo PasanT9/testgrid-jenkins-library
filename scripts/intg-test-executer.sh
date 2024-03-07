@@ -84,10 +84,10 @@ rm -rf oracle.sql
 curl -o oracle.sql https://raw.githubusercontent.com/PasanT9/testgrid-jenkins-library/apim-main/dbscripts/apimgt/oracle.sql
 scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} oracle.sql $instanceUser@${WSO2InstanceName}:/opt/testgrid/workspace/dbscripts/apimgt
 
-curl -o provision_db_wso2am_test.sh https://raw.githubusercontent.com/PasanT9/testgrid-jenkins-library/apim-main/provision_db_wso2am.sh
-scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} provision_db_wso2am_test.sh $instanceUser@${WSO2InstanceName}:/opt/testgrid/workspace
+ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} $instanceUser@${WSO2InstanceName} "cd /opt/testgrid/workspace && sed -i 's|DB_SCRIPT_PATH=/opt/testgrid/workspace/\$PRODUCT_PACK_NAME/dbscripts|DB_SCRIPT_PATH=/opt/testgrid/workspace/dbscripts|' provision_db_wso2am.sh"
+
 log_info "Executing the updated /opt/testgrid/workspace/provision_db_${PRODUCT_NAME}.sh on remote Instance"
-ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} $instanceUser@${WSO2InstanceName} "cd /opt/testgrid/workspace && sudo bash /opt/testgrid/workspace/provision_db_wso2am_test.sh"
+ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} $instanceUser@${WSO2InstanceName} "cd /opt/testgrid/workspace && sudo bash provision_db_wso2am.sh"
 
 # Setting the test status as failed
 MVNSTATE=1
