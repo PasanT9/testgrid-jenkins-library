@@ -74,16 +74,18 @@ scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileL
 log_info "Executing /opt/testgrid/workspace/wso2-update.sh on remote Instance"
 ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} $instanceUser@${WSO2InstanceName} "cd /opt/testgrid/workspace && sudo bash /opt/testgrid/workspace/wso2-update.sh" "'$WUM_USERNAME'" "'$WUM_PASSWORD'"
 
+ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} $instanceUser@${WSO2InstanceName} "mkdir -p /opt/testgrid/workspace/dbscripts/apimgt/"
+
 log_info "Adding custom scripts"
 curl -o oracle.sql https://raw.githubusercontent.com/PasanT9/testgrid-jenkins-library/apim-main/dbscripts/oracle.sql
-scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} oracle.sql $instanceUser@${WSO2InstanceName}:/opt/testgrid/workspace/dbscripts/oracle.sql
+scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} oracle.sql $instanceUser@${WSO2InstanceName}:/opt/testgrid/workspace/dbscripts
 
 rm -rf oracle.sql
 curl -o oracle.sql https://raw.githubusercontent.com/PasanT9/testgrid-jenkins-library/apim-main/dbscripts/apimgt/oracle.sql
-scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} oracle.sql $instanceUser@${WSO2InstanceName}:/opt/testgrid/workspace/dbscripts/apimgt/oracle.sql
+scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} oracle.sql $instanceUser@${WSO2InstanceName}:/opt/testgrid/workspace/dbscripts/apimgt
 
 curl -o provision_db_wso2am_test.sh https://raw.githubusercontent.com/PasanT9/testgrid-jenkins-library/apim-main/provision_db_wso2am.sh
-scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} provision_db_wso2am_test.sh $instanceUser@${WSO2InstanceName}:/opt/testgrid/workspace/provision_db_wso2am_test.sh
+scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} provision_db_wso2am_test.sh $instanceUser@${WSO2InstanceName}:/opt/testgrid/workspace
 log_info "Executing the updated /opt/testgrid/workspace/provision_db_${PRODUCT_NAME}.sh on remote Instance"
 ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${keyFileLocation} $instanceUser@${WSO2InstanceName} "cd /opt/testgrid/workspace && sudo bash /opt/testgrid/workspace/provision_db_wso2am_test.sh"
 
